@@ -1,0 +1,41 @@
+services:
+  node1:
+    build: .
+    container_name: tiny-p2p-node1
+    command:
+      [
+        "./tiny-p2p-node",
+        "--nick", "node1",
+        "--listen", "/ip4/0.0.0.0/tcp/7001",
+        "--topic", "tiny-net"
+      ]
+    ports:
+      - "7001:7001"
+
+  node2:
+    build: .
+    container_name: tiny-p2p-node2
+    depends_on:
+      - node1
+    command:
+      [
+        "./tiny-p2p-node",
+        "--nick", "node2",
+        "--listen", "/ip4/0.0.0.0/tcp/7001",
+        "--dial", "/dns4/node1/tcp/7001",
+        "--topic", "tiny-net"
+      ]
+
+  node3:
+    build: .
+    container_name: tiny-p2p-node3
+    depends_on:
+      - node1
+    command:
+      [
+        "./tiny-p2p-node",
+        "--nick", "node3",
+        "--listen", "/ip4/0.0.0.0/tcp/7001",
+        "--dial", "/dns4/node1/tcp/7001",
+        "--topic", "tiny-net"
+      ]
