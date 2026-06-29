@@ -1,7 +1,13 @@
+x-node-common: &node-common
+  image: tiny-p2p-node:dev
+  restart: unless-stopped
+
 services:
   node1:
-    build: .
-    container_name: tiny-p2p-node1
+    <<: *node-common
+    build:
+      context: .
+      dockerfile: Dockerfile
     command:
       [
         "./tiny-p2p-node",
@@ -13,8 +19,7 @@ services:
       - "7001:7001"
 
   node2:
-    build: .
-    container_name: tiny-p2p-node2
+    <<: *node-common
     depends_on:
       - node1
     command:
@@ -27,8 +32,7 @@ services:
       ]
 
   node3:
-    build: .
-    container_name: tiny-p2p-node3
+    <<: *node-common
     depends_on:
       - node1
     command:
